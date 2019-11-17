@@ -1,0 +1,34 @@
+{
+  "name": "crypto-hotkeys",
+  "version": "0.0.1",
+  "description": "Hot keys application for executing efficient orders on the Coinbase Pro cryptocurrency trading exchange",
+  "main": "server.js",
+  "scripts": {
+    "test": "test",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/swimclan/crypto-hotkeys.git"
+  },
+  "keywords": [
+    "cryptocurrency",
+    "hotkeys",
+    "trading",
+    "bitcoin"
+  ],
+  "author": "Matthew Herron",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/swimclan/crypto-hotkeys/issues"
+  },
+  "homepage": "https://github.com/swimclan/crypto-hotkeys#readme",
+  "dependencies": {
+    "coinbase-pro": "^0.9.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.4"
+  }
+}
