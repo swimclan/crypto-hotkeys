@@ -1,9 +1,12 @@
 const express = require('express');
 require('dotenv').config();
+const Logger = require('./src/services/logger');
 
 const app = express();
+const logger = Logger({ outputs: ['file', 'console'] });
 
 app.get('/', (req, res) => {
+  logger.log('info', 'About to send hello, world');
   res.status(200)
     .send('Hello, world');
 });
