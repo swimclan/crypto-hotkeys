@@ -5,8 +5,23 @@ const Logger = require('./src/services/logger');
 const app = express();
 const logger = Logger({ outputs: ['file', 'console'] });
 
+// Middlewares
+app.use(function(req, res, next) {
+  const method = req.method;
+  const path = req.url;
+  res.on('finish', () => {
+    let level;
+    if (res.statusCode > 399) {
+      level = 'error';
+    } else {
+      level = 'info';
+    }
+    logger.log(level, `${method} ${res.statusCode} - '${path}'`);
+  });
+  next();
+});
+
 app.get('/', (req, res) => {
-  logger.log('info', 'About to send hello, world');
   res.status(200)
     .send('Hello, world');
 });

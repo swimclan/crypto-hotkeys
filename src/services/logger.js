@@ -49,6 +49,16 @@ module.exports = function Logger(options = {}) {
   }
 
   /**
+   * Writes to a file
+   * @param {string} level 
+   * @param {string} message
+   * @return {void}
+   */
+  function writeFile(level, message) {
+    fs.writeFileSync(file, `[${level.toUpperCase()}] ${message}\n`, { flag: 'a' })
+  }
+
+  /**
    * Private method to send messages to all configured outputs
    * @private
    * @param {string} message - String of the message being sent
@@ -58,15 +68,15 @@ module.exports = function Logger(options = {}) {
     switch(level) {
       case 'info':
         consoleEnabled && console.info(`[INFO] ${message}`);
-        fileEnabled && fs.writeFileSync(file, `[INFO] ${message}\n`, { flag: 'a' });
+        fileEnabled && writeFile(level, message);
         break;
       case 'error':
         consoleEnabled && console.error(`[ERROR] ${message}`);
-        fileEnabled && fs.writeFileSync(file, `[ERROR] ${message}\n`, { flag: 'a' });
+        fileEnabled && writeFile(level, message);
         break;
       default:
         consoleEnabled && console.log(`[INFO] ${message}`);
-        fileEnabled && fs.writeFileSync(file, `[INFO] ${message}\n`, { flag: 'a' });
+        fileEnabled && writeFile(level, message);
     }
   }
 
