@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
+let instance;
+
 /**
  * A logging service factory for logging to file and/or console
  * @param {object} options - options object
@@ -44,7 +46,7 @@ module.exports = function Logger(options = {}) {
   function initialize() {
     if (fileEnabled) {
       file = path.resolve(__dirname + '/../../logs/app.log');
-      send('info', `App log initialized at ${new Date()}`);
+      send('info', `App log initialized`);
     }
   }
 
@@ -55,7 +57,8 @@ module.exports = function Logger(options = {}) {
    * @return {void}
    */
   function writeFile(level, message) {
-    fs.writeFileSync(file, `[${level.toUpperCase()}] ${message}\n`, { flag: 'a' })
+    const currentDateTime = new Date();
+    fs.writeFileSync(file, `[${level.toUpperCase()}] ${message} [${currentDateTime}]\n`, { flag: 'a' })
   }
 
   /**
@@ -65,25 +68,26 @@ module.exports = function Logger(options = {}) {
    * @return {void}
    */
   function send(level, message) {
+    const currentDateTime = new Date();
     switch(level) {
       case 'info':
-        consoleEnabled && console.info(`[INFO] ${message}`);
+        consoleEnabled && console.info(`[INFO] ${message} [${currentDateTime}]`);
         fileEnabled && writeFile(level, message);
         break;
       case 'error':
-        consoleEnabled && console.error(`[ERROR] ${message}`);
+        consoleEnabled && console.error(`[ERROR] ${message} [${currentDateTime}]`);
         fileEnabled && writeFile(level, message);
         break;
       default:
-        consoleEnabled && console.log(`[INFO] ${message}`);
+        consoleEnabled && console.log(`[INFO] ${message} [${currentDateTime}]`);
         fileEnabled && writeFile(level, message);
     }
   }
 
   // Initialize factory
-  initialize();
+  !instance && initialize();
 
-  return {
+  return instance || (instance = {
     /**
      * A logging method to be used by the logger's consumer
      * @param {string} level - Either 'error' or 'info'
@@ -92,5 +96,5 @@ module.exports = function Logger(options = {}) {
       log(level, message) {
         send(level, message);
       }
-  }
+  });
 }
