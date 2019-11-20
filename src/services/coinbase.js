@@ -43,8 +43,7 @@ module.exports = function Coinbase(options = {}) {
    * @return {string} - The encoded signed request data
    */
   function signRequest(requestPath, requestBody, method, timestamp) {
-    console.log(requestBody);
-    const body = requestBody ? JSON.stringify(requestBody) : '';
+    const body = requestBody || '';
     const what = timestamp + method.toUpperCase() + requestPath + body;
     const key = Buffer.from(credentials.secret, 'base64');
     const hmac = crypto.createHmac('sha256', key);
@@ -59,7 +58,10 @@ module.exports = function Coinbase(options = {}) {
    * @return {Promise<any>} - A resolved promise of the fetched data
    */
   function _request(urlFragments, options = {}) {
-    const body = options.body;
+    var body;
+    try {
+      body = JSON.stringify(options.body);
+    } catch (_) { body = ''; }
     const method = options.method;
     const requestPath = `/${urlFragments.join('/')}`;
     const timestamp = Date.now() / 1000;
@@ -82,13 +84,20 @@ module.exports = function Coinbase(options = {}) {
       request({
         method,
         headers,
-        body: JSON.stringify(body),
+        body,
         url: endpoint + requestPath
       }, (err, response, data) => {
         if (err) {
           return reject(err);
         }
-        return resolve(JSON.parse(data));
+        let outputData;
+        try {
+          outputData = JSON.parse(data);
+        } catch (err) {
+          outputData = null;
+          logger.log('error', generateErrorMessage(err));
+        }
+        return resolve(outputData);
       });
     });
   }
@@ -178,10 +187,41 @@ module.exports = function Coinbase(options = {}) {
     return order;
   }
 
+  /**
+   * The sell method
+   * @param {object} params - The order parameters for the sell
+   * @return {Promise<object>} - The order the just got sold
+   */
+  async function sell({ size, price, type = 'limit', product_id }) {
+    const side = 'sell';
+    const body = {
+      type,
+      size,
+      side,
+      product_id
+    };
+    if (type === 'limit') {
+      body.postOnly = true;
+      body.price = price;
+    }
+    let order;
+    try {
+      order = await _request(['orders'], {
+        method: 'POST',
+        body
+      });
+    } catch (err) {
+      order = {};
+      logger.log('error', generateErrorMessage(err));
+    }
+    return order;
+  }
+
   return {
     getProducts,
     getAccounts,
     getFees,
-    buy
+    buy,
+    sell
   }
 }

@@ -51,6 +51,11 @@ app.post('/buy', async (req, res) => {
   res.status(200).json(order);
 });
 
+app.post('/sell', async (req, res) => {
+  const order = await coinbase.sell(req.body);
+  res.status(200).json(order);
+});
+
 app.listen(3000, () => {
   console.log('Express application running on port 3000');
 });
