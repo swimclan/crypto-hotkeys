@@ -114,6 +114,7 @@ module.exports = function Coinbase(options = {}) {
 
   /**
    * Get all products from exchange
+   * @private
    * @return {Promise<object[]>} - The collection of products
    */
   async function getProducts() {
@@ -129,6 +130,7 @@ module.exports = function Coinbase(options = {}) {
 
   /**
    * Get all account info for authenticated user
+   * @private
    * @return {Promise<object[]>} - The collection of account infos
    */
   async function getAccounts() {
@@ -144,6 +146,7 @@ module.exports = function Coinbase(options = {}) {
 
   /**
    * Get the current fee schedule for the authenticated user
+   * @private
    * @return {Promise<object[]>} - The fee schedule
    */
   async function getFees() {
@@ -162,8 +165,7 @@ module.exports = function Coinbase(options = {}) {
    * @param {object} params - The params required to execute a buy order
    * @return {Promise<object>} - The resulting buy order placed on the exchange
    */
-  async function buy({ size, price, type = 'limit', product_id } = {}) {
-    const side = 'buy';
+  async function order({ side, size, price, type = 'limit', product_id } = {}) {
     const body = {
       type,
       side,
@@ -188,40 +190,26 @@ module.exports = function Coinbase(options = {}) {
   }
 
   /**
-   * The sell method
-   * @param {object} params - The order parameters for the sell
-   * @return {Promise<object>} - The order the just got sold
+   * Cancel all open orders
+   * @private
+   * @return {Promise<string[]>} - Promise resolved with list of all canceled order ids
    */
-  async function sell({ size, price, type = 'limit', product_id }) {
-    const side = 'sell';
-    const body = {
-      type,
-      size,
-      side,
-      product_id
-    };
-    if (type === 'limit') {
-      body.postOnly = true;
-      body.price = price;
+    async function cancel() {
+      let canceledOrders;
+      try {
+        canceledOrders = await _request(['orders'], { method: 'DELETE' });
+      } catch (err) {
+        canceledOrders = [];
+        logger.log('error', generateErrorMessage(err));
+      }
+      return canceledOrders;
     }
-    let order;
-    try {
-      order = await _request(['orders'], {
-        method: 'POST',
-        body
-      });
-    } catch (err) {
-      order = {};
-      logger.log('error', generateErrorMessage(err));
-    }
-    return order;
-  }
 
   return {
     getProducts,
     getAccounts,
     getFees,
-    buy,
-    sell
+    order,
+    cancel
   }
 }
