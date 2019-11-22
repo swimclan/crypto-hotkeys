@@ -1,7 +1,10 @@
 const {
   productsController,
   accountInfoController,
-  feeComputerController
+  feeComputerController,
+  buyController,
+  sellController,
+  cancelController
 } = require('../controllers');
 
 const Logger = require('../services/logger');
@@ -24,31 +27,12 @@ function loggerMiddleware(req, res, next) {
 
 module.exports.coinbase = function(router) {
   router.use(loggerMiddleware);
-  
   router.get('/products', productsController);
   router.get('/account-info/:product_id', accountInfoController);
   router.get('/fee-computer/type/:type/percent/:percent', feeComputerController);
-
-  router.get('/fees', async (req, res) => {
-    const fees = await coinbase.getFees();
-    res.status(200).json(fees);
-  });
-
-  router.post('/buy', async (req, res) => {
-    const order = await coinbase.order({...req.body, side: 'buy'});
-    res.status(200).json(order);
-  });
-
-  router.post('/sell', async (req, res) => {
-    const order = await coinbase.order({...req.body, side: 'sell'});
-    res.status(200).json(order);
-  });
-
-  router.delete('/cancel', async (req, res) => {
-    const order = await coinbase.cancel();
-    res.status(200).json(order);
-  });
-
+  router.post('/buy', buyController);
+  router.post('/sell', sellController);
+  router.delete('/cancel', cancelController);
   return router;
 }
 

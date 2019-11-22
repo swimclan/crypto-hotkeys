@@ -110,5 +110,45 @@ module.exports = {
         usd: availableUSDFraction,
         remainder: availableUSDRemainder
       });
+  },
+
+  async buyController(req, res) {
+    let order;
+    try {
+      order = await coinbase.order({...req.body, side: 'buy'});
+    } catch (err) {
+      logger.log('error', 'buyController() - Something went wrong with the buy execution');
+      res
+        .status(500)
+        .json({ error: 'buyController() - Something went wrong with the buy execution' });
+    }
+    res.status(200).json(order);
+  },
+
+  async sellController(req, res) {
+    let order;
+    console.log(req.body);
+    try {
+      order = await coinbase.order({...req.body, side: 'sell'});
+    } catch (err) {
+      logger.log('error', 'sellController() - Something went wrong during sell execution');
+      res
+        .status(500)
+        .json({ error: 'sellController() - Something went wrong during sell execution' });
+    }
+    res.status(200).json(order);
+  },
+
+  async cancelController(req, res) {
+    let orders;
+    try { 
+      orders = await coinbase.cancel();
+    } catch (err) {
+      logger.log('error', 'cancelController() - Something went wrong with the cancel');
+      res
+        .status(500)
+        .json({ error: 'cancelController() - Something went wrong with the cancel' });
+    }
+    res.status(200).json(orders);
   }
 }
