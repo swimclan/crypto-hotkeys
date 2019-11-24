@@ -4,10 +4,12 @@ const {
   feeComputerController,
   buyController,
   sellController,
-  cancelController
+  cancelController,
+  generateCreateUserAndCredentialController
 } = require('../controllers');
 
 const Logger = require('../services/logger');
+
 const logger = Logger({ outputs: ['file', 'console'] });
 
 function loggerMiddleware(req, res, next) {
@@ -25,7 +27,7 @@ function loggerMiddleware(req, res, next) {
   next();
 }
 
-module.exports.coinbase = function(router) {
+module.exports.coinbase = function(router, db) {
   router.use(loggerMiddleware);
   router.get('/products', productsController);
   router.get('/account-info/:product_id', accountInfoController);
@@ -36,9 +38,10 @@ module.exports.coinbase = function(router) {
   return router;
 }
 
-module.exports.user = function(router) {
+module.exports.user = function(router, db) {
   router.use(loggerMiddleware);
-  
+  router.post('/create', generateCreateUserAndCredentialController(db));
+
   router.get('/', (req, res) => {
     res.status(200).send('User retrieved');
   });

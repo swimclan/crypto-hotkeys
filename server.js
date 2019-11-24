@@ -7,15 +7,14 @@ const DB = require('./src/services/db');
 const router = express.Router();
 
 const app = express();
-const logger = Logger({ outputs: ['file', 'console'] });
 
-// Database connection init
-const db = DB();
+function configureMiddlware(db) {
+  router.use(bodyParser.json({ strict: false }))
+  app.use('/coinbase', RouterFactory.coinbase(router, db));
+  app.use('/user', RouterFactory.user(router, db));
+}
 
-// Middlewares
-router.use(bodyParser.json({ strict: false }))
-app.use('/coinbase', RouterFactory.coinbase(router));
-app.use('/user', RouterFactory.user(router));
+DB().then(db => configureMiddlware(db));
 
 app.listen(3000, () => {
   console.log('Express application running on port 3000');

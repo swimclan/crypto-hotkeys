@@ -150,5 +150,41 @@ module.exports = {
         .json({ error: 'cancelController() - Something went wrong with the cancel' });
     }
     res.status(200).json(orders);
+  },
+
+  generateCreateUserAndCredentialController(db) {
+    const User = db.getModel('user');
+    const Credential = db.getModel('credential');
+    return async (req, res, next) => {
+      const { first_name, last_name, email_address, password, credentialId = null } = req.body;
+      let credential, user;
+      if (!credentialId) {
+        try {
+          credential = await Credential.create(req.body.credential);
+        } catch (err) {
+          logger.log('error', 'generateCreateUserAndCredentialController() - Something went wrong with creating user');
+          return res
+            .status(500)
+            .json({ error: 'generateCreateUserAndCredentialController() - Something went wrong with creating user' })
+        }
+      }
+      try {
+        user = await User.create(
+          {
+            first_name,
+            last_name,
+            email_address,
+            password,
+            credentialId: credentialId || credential.id
+          });
+      } catch (err) {
+        logger.log('error', 'generateCreateUserAndCredentialController() - Something went wrong with creating user');
+        return res
+          .status(500)
+          .json({ error: 'generateCreateUserAndCredentialController() - Something went wrong with creating user' })
+      }
+      const outUser = credential ? { ...user.toJSON(), credential: {...credential.toJSON()} } : user.toJSON();
+      return res.status(200).json(outUser);
+    }
   }
 }
