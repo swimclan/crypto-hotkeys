@@ -1,6 +1,7 @@
 const _get = require('lodash/get');
 const Logger = require('../services/logger');
 const Coinbase = require('../services/coinbase');
+const { encryptPassword } = require('../utils');
 
 const logger = Logger({ outputs: ['file', 'console'] });
 const coinbase = Coinbase({
@@ -157,24 +158,34 @@ module.exports = {
     const Credential = db.getModel('credential');
     return async (req, res, next) => {
       const { first_name, last_name, email_address, password, credentialId = null } = req.body;
-      let credential, user;
+      let credential, user, passwordHash;
       if (!credentialId) {
         try {
           credential = await Credential.create(req.body.credential);
         } catch (err) {
-          logger.log('error', 'generateCreateUserAndCredentialController() - Something went wrong with creating user');
+          logger.log('error', typeof err === 'string' ? err : err.message);
           return res
             .status(500)
             .json({ error: 'generateCreateUserAndCredentialController() - Something went wrong with creating user' })
         }
       }
+
+      try {
+        passwordHash = await encryptPassword(password);
+      } catch (err) {
+        logger.log('error', 'generateCreateUserAndCredentialController() - Something went wrong hashing user password');
+        return res
+          .status(500)
+          .json({ error: 'generateCreateUserAndCredentialController() - Something went wrong hashing user password' });
+      }
+
       try {
         user = await User.create(
           {
             first_name,
             last_name,
             email_address,
-            password,
+            password: passwordHash,
             credentialId: credentialId || credential.id
           });
       } catch (err) {

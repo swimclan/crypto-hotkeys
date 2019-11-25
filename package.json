@@ -1,6 +1,6 @@
 {
   "name": "crypto-hotkeys",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Hot keys application for executing efficient orders on the Coinbase Pro cryptocurrency trading exchange",
   "main": "server.js",
   "scripts": {
@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/swimclan/crypto-hotkeys#readme",
   "dependencies": {
+    "bcrypt": "^3.0.7",
     "body-parser": "^1.19.0",
     "crypto": "^1.0.1",
     "dotenv": "^8.2.0",
