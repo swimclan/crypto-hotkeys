@@ -19,6 +19,7 @@ module.exports = async function DB() {
   const User = sequelize.define('user', UserSchema);
   const Credential = sequelize.define('credential', CredentialSchema);
   Credential.hasMany(User);
+  User.belongsTo(Credential);
 
   async function syncModels(models) {
     for (model of models) {

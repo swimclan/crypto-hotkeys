@@ -18,10 +18,16 @@ module.exports.coinbase = function(router, db) {
   return router;
 }
 
-module.exports.user = function(router, db) {
+module.exports.user = function(router, db, passport) {
   router.post('/create', generateCreateUserAndCredentialController(db));
-  router.get('/', (req, res) => {
-    res.status(200).send('User retrieved');
+  router.post('/login', passport.authenticate('local'), (req, res) => {
+    res.status(200).json(req.user);
+  });
+  router.get('/protected', (req, res) => {
+    if (!req.user || !req.user.id) {
+      return res.status(401).send('Unauthorized');
+    }
+    res.status(200).send('You can see the secret info!');
   });
 
   return router;

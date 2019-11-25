@@ -128,7 +128,6 @@ module.exports = {
 
   async sellController(req, res) {
     let order;
-    console.log(req.body);
     try {
       order = await coinbase.order({...req.body, side: 'sell'});
     } catch (err) {
