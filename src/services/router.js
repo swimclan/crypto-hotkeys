@@ -5,7 +5,8 @@ const {
   buyController,
   sellController,
   cancelController,
-  generateCreateUserAndCredentialController
+  generateCreateUserAndCredentialController,
+  getOrderbook
 } = require('../controllers');
 
 module.exports.coinbase = function(router, db) {
@@ -15,6 +16,7 @@ module.exports.coinbase = function(router, db) {
   router.post('/buy', buyController);
   router.post('/sell', sellController);
   router.delete('/cancel', cancelController);
+  router.get('/orderbook/:product', getOrderbook);
   return router;
 }
 

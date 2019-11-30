@@ -1,21 +1,19 @@
 const express = require('express');
 require('dotenv').config();
 
-// Express session dependencies
-const redis = require('redis')
-const session = require('express-session')
-const RedisStore = require('connect-redis')(session);
-const client = redis.createClient();
-
 // Passport dependencies
-var passport = require('passport')
-  , LocalStrategy = require('passport-local').Strategy;
+const PassportService = require('./src/services/passport');
 
 const bodyParser = require('body-parser')
 const Logger = require('./src/services/logger');
 const RouterFactory = require('./src/services/router');
 const DB = require('./src/services/db');
-const { checkPassword } = require('./src/utils');
+
+// Express session dependencies
+const redis = require('redis')
+const session = require('express-session')
+const RedisStore = require('connect-redis')(session);
+const client = redis.createClient();
 
 const app = express();
 const router = express.Router();
@@ -41,68 +39,10 @@ const sessionMiddleware = session({
 
 function configureMiddlware(db) {
   // Set session and passport middleware
+  const passport = PassportService(db);
   app.use(sessionMiddleware);
   app.use(passport.initialize());
   app.use(passport.session());
-
-  passport.use(new LocalStrategy({
-    usernameField: 'email_address',
-    passwordField: 'password'
-  }, async function(email, password, done) {
-    const User = db.getModel('user');
-    let user;
-    // Retrieve the user from db
-    try {
-      user = await User.findOne({ where: { email_address: email } })
-    } catch (err) {
-      logger.log('error', typeof err === 'string' ? err : err.message);
-      return done(err, false, { message: 'Something went wrong during password validation' });
-    }
-    
-    if (!user) {
-      return done(null, false, { message: 'User not found' });
-    }
-
-    // Check password validity
-    let validPassword = false;
-    try {
-      validPassword = await checkPassword(password, user.password);
-    } catch (err) {
-      logger.log('error', typeof err === 'string' ? err : err.message);
-      return done(err, false, { message: 'Something went wrong during password validation' });
-    }
-
-    if (validPassword) {
-      return done(null, user);
-    } else {
-      return done(null, false, { message: 'Password is incorrect' });
-    }
-  }));
-
-  passport.serializeUser(function(user, done) {
-    done(null, user.id);
-  });
-
-  passport.deserializeUser(async function(id, done) {
-    const User = db.getModel('user');
-    const Credential = db.getModel('credential');
-    let user, error;
-    try {
-      user = await User.findOne(
-        {
-          where: { id },
-          include: [ 
-            { model: Credential, require: true }
-          ] 
-        }
-      );
-    } catch (err) {
-      logger.log('error', typeof err === 'string' ? err : err.message);
-      error = err;
-    }
-    return done(error, user);
-  });
-
   // Set router middleware
   router.use(bodyParser.json({ strict: false }));
   router.use(loggerMiddleware);

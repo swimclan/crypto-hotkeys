@@ -194,22 +194,43 @@ module.exports = function Coinbase(options = {}) {
    * @private
    * @return {Promise<string[]>} - Promise resolved with list of all canceled order ids
    */
-    async function cancel() {
-      let canceledOrders;
-      try {
-        canceledOrders = await _request(['orders'], { method: 'DELETE' });
-      } catch (err) {
-        canceledOrders = [];
-        logger.log('error', generateErrorMessage(err));
-      }
-      return canceledOrders;
+  async function cancel() {
+    let canceledOrders;
+    try {
+      canceledOrders = await _request(['orders'], { method: 'DELETE' });
+    } catch (err) {
+      canceledOrders = [];
+      logger.log('error', generateErrorMessage(err));
     }
+    return canceledOrders;
+  }
+
+  /**
+   * Get the level 1 orderbook data for a specific product
+   * @private
+   * @param {string} productId 
+   * @return {void}
+   */
+  async function getL1OrderBook(productId) {
+    let orderbook;
+    try {
+      orderbook = await _request(['products', productId, 'book'], {
+        method: 'GET'
+      });
+    } catch (err) {
+      orderbook = {};
+      logger.log('error', generateErrorMessage(err));
+    }
+    return orderbook;
+  }
+
 
   return {
     getProducts,
     getAccounts,
     getFees,
     order,
-    cancel
+    cancel,
+    getL1OrderBook
   }
 }

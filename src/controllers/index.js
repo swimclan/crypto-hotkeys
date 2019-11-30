@@ -114,29 +114,65 @@ module.exports = {
   },
 
   async buyController(req, res) {
+    const { product_id } = req.body;
+    let orderbook;
+    try {
+      orderbook = await coinbase.getL1OrderBook(product_id);
+    } catch (err) {
+      orderbook = {}
+      logger.log('error', 'buyController() - Something went wrong when trying to get orderbook');
+      return res
+        .status(500)
+        .json({ error: 'buyController() - Something went wrong when trying to get orderbook' });
+    }
+    const bestBid = +_get(orderbook, 'bids[0][0]', 0);
+    const orderParams = {
+      ...req.body,
+      price: bestBid,
+      side: 'buy'
+    }
+
     let order;
     try {
-      order = await coinbase.order({...req.body, side: 'buy'});
+      order = await coinbase.order(orderParams);
     } catch (err) {
       logger.log('error', 'buyController() - Something went wrong with the buy execution');
-      res
+      return res
         .status(500)
         .json({ error: 'buyController() - Something went wrong with the buy execution' });
     }
-    res.status(200).json(order);
+    return res.status(200).json(order);
   },
 
   async sellController(req, res) {
+    const { product_id } = req.body;
+    let orderbook;
+    try {
+      orderbook = await coinbase.getL1OrderBook(product_id);
+    } catch (err) {
+      orderbook = {}
+      logger.log('error', 'sellController() - Something went wrong with orderbook');
+      return res
+        .status(500)
+        .json({ error: 'sellController() - Something went wrong with orderbook' });
+    }
+    const bestAsk = +_get(orderbook, 'asks[0][0]', 0);
+    const orderParams = {
+      ...req.body,
+      price: bestAsk,
+      side: 'sell'
+    }
+
     let order;
     try {
-      order = await coinbase.order({...req.body, side: 'sell'});
+      order = await coinbase.order(orderParams);
     } catch (err) {
       logger.log('error', 'sellController() - Something went wrong during sell execution');
-      res
+      return res
         .status(500)
         .json({ error: 'sellController() - Something went wrong during sell execution' });
     }
-    res.status(200).json(order);
+    return  res.status(200).json(order);
   },
 
   async cancelController(req, res) {
@@ -145,11 +181,11 @@ module.exports = {
       orders = await coinbase.cancel();
     } catch (err) {
       logger.log('error', 'cancelController() - Something went wrong with the cancel');
-      res
+      return res
         .status(500)
         .json({ error: 'cancelController() - Something went wrong with the cancel' });
     }
-    res.status(200).json(orders);
+    return res.status(200).json(orders);
   },
 
   generateCreateUserAndCredentialController(db) {
@@ -196,5 +232,17 @@ module.exports = {
       const outUser = credential ? { ...user.toJSON(), credential: {...credential.toJSON()} } : user.toJSON();
       return res.status(200).json(outUser);
     }
+  },
+
+  getOrderbook(req, res) {
+    const productId = req.params.product
+    coinbase.getL1OrderBook(productId)
+      .then((orderbook) => {
+        res.status(200).json(orderbook);
+    })
+      .catch((err) => {
+        logger.log('error', 'getOrderbook() - Something went wrong with orderbook fetch');
+        res.status(500).json({ error: 'getOrderbook() - Something went wrong with orderbook fetch' });
+    });
   }
 }
