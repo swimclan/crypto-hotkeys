@@ -2,7 +2,8 @@ const path = require('path');
 
 module.exports = {
   entry: './index.js',
-  mode: 'production',
+  mode: 'development',
+  devtool: 'eval-source-map',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js'
@@ -18,7 +19,15 @@ module.exports = {
             presets: ['@babel/preset-env']
           }
         }
-      }
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        use: [
+          'style-loader',
+          'css-loader',
+          'sass-loader',
+        ],
+      },
     ]
   }
 }

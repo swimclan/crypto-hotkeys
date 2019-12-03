@@ -34,7 +34,7 @@ app.use(express.static('assets'));
 // Setup express sessions
 const sessionMiddleware = session({
   store: new RedisStore({ client }),
-  secret: '98_0n9u^wBnwi$90gibO',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   proxy: true,
   saveUninitialized: true,
