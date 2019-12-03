@@ -1,5 +1,6 @@
 const express = require('express');
 require('dotenv').config();
+const path = require('path');
 
 // Passport dependencies
 const PassportService = require('./src/services/passport');
@@ -20,8 +21,15 @@ const router = express.Router();
 
 const logger = Logger({ outputs: ['file', 'console'] });
 
+// View engine settings
+app.set('views', path.join(__dirname, 'src', 'views'));
+app.set('view engine', 'ejs');
+
 // Trust upstream recverse proxies
 app.set('trust proxy', 1);
+
+// Setup static file serving middleware
+app.use(express.static('assets'));
 
 // Setup express sessions
 const sessionMiddleware = session({
@@ -37,7 +45,7 @@ const sessionMiddleware = session({
   }
 });
 
-function configureMiddlware(db) {
+function configureMiddlware(db) { 
   // Set session and passport middleware
   const passport = PassportService(db);
   app.use(sessionMiddleware);
@@ -48,6 +56,7 @@ function configureMiddlware(db) {
   router.use(loggerMiddleware);
   app.use('/coinbase', RouterFactory.coinbase(router, db));
   app.use('/user', RouterFactory.user(router, db, passport));
+  app.use('/', RouterFactory.page(router));
 }
 
 DB().then(db => configureMiddlware(db));

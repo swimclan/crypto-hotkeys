@@ -1,6 +1,6 @@
 {
   "name": "crypto-hotkeys",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Hot keys application for executing efficient orders on the Coinbase Pro cryptocurrency trading exchange",
   "main": "server.js",
   "scripts": {
@@ -29,6 +29,7 @@
     "connect-redis": "^4.0.3",
     "crypto": "^1.0.1",
     "dotenv": "^8.2.0",
+    "ejs": "^3.0.1",
     "express": "^4.17.1",
     "express-session": "^1.17.0",
     "lodash": "^4.17.15",

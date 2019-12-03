@@ -34,3 +34,11 @@ module.exports.user = function(router, db, passport) {
 
   return router;
 }
+
+module.exports.page = function(router) {
+  router.get('/', (req, res) => {
+    res.status(200).render('index');
+  });
+
+  return router;
+}
