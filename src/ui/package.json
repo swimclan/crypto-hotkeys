@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack",
+    "storybook": "start-storybook",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Matt Herron",
@@ -13,6 +14,7 @@
     "@babel/core": "^7.7.4",
     "@babel/preset-env": "^7.7.4",
     "@babel/preset-react": "^7.7.4",
+    "@storybook/react": "^5.2.8",
     "babel-loader": "^8.0.6",
     "css-loader": "^3.2.1",
     "node-sass": "^4.13.0",
@@ -21,7 +23,10 @@
     "webpack-cli": "^3.3.10"
   },
   "dependencies": {
+    "classnames": "^2.2.6",
+    "prop-types": "^15.7.2",
     "react": "^16.12.0",
-    "react-dom": "^16.12.0"
+    "react-dom": "^16.12.0",
+    "react-router-dom": "^5.1.2"
   }
 }

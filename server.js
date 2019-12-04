@@ -54,8 +54,8 @@ function configureMiddlware(db) {
   // Set router middleware
   router.use(bodyParser.json({ strict: false }));
   router.use(loggerMiddleware);
-  app.use('/coinbase', RouterFactory.coinbase(router, db));
-  app.use('/user', RouterFactory.user(router, db, passport));
+  app.use('/api/coinbase', RouterFactory.coinbase(router, db));
+  app.use('/api/user', RouterFactory.user(router, db, passport));
   app.use('/', RouterFactory.page(router));
 }
 

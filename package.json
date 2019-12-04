@@ -7,6 +7,7 @@
     "test": "test",
     "build:prod": "webpack",
     "build": "webpack",
+    "storybook": "cd ./src/ui && npm run storybook",
     "start": "cd ./src/ui && npm run build && cp -r ./dist/bundle.js ../../assets/js/bundle.js && cd ../.. && node server.js",
     "watch": "nodemon --exec npm start --ignore 'assets' --ignore 'src/ui/dist'"
   },
