@@ -1,0 +1,25 @@
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import './account-info.scss';
+
+function AccountInfo(props) {
+  const { account } = props;
+  const currencies = Object.keys(account);
+  return (
+    <div className="account-info-container">
+      <ul>
+        {
+          currencies.map(currency => (
+            <li key={currency}>{`${currency}: ${currency === 'USD' ? '$' : ''}${account[currency]}`}</li>
+          ))
+        }
+      </ul>
+    </div>
+  );
+}
+
+AccountInfo.propTypes = {
+  account: PropTypes.object
+}
+
+export default AccountInfo;

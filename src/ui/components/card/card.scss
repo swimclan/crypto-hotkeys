@@ -1,0 +1,15 @@
+.card-container {
+  display: flex;
+  width: 100%;
+  padding: 2em 0.5em 0.5em 0.5em;
+  -webkit-box-shadow: 1px 1px 5px 0px rgba(189,189,189,1);
+  -moz-box-shadow: 1px 1px 5px 0px rgba(189,189,189,1);
+  box-shadow: 1px 1px 5px 0px rgba(189,189,189,1);
+  &::before {
+    content: attr(data-label);
+    font-size: 0.8em;
+    position: absolute;
+    top: 1.5em;
+    color: #aaa;
+  }
+}
