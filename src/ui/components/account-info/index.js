@@ -10,7 +10,9 @@ function AccountInfo(props) {
       <ul>
         {
           currencies.map(currency => (
-            <li key={currency}>{`${currency}: ${currency === 'USD' ? '$' : ''}${account[currency]}`}</li>
+          <li key={currency}>
+            <span className="account-info-currency-name">{currency}</span>
+            <span>{`: ${currency === 'USD' ? '$' : ''}${account[currency]}`}</span></li>
           ))
         }
       </ul>

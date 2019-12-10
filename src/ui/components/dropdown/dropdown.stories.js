@@ -5,6 +5,7 @@ export default { title: 'Dropdown' };
 
 export const withItems = () => (
   <Dropdown
+    label="Selected Product"
     placeholder="Choose a product"
     items={[
       {id: 'BTC-USD', label: 'BTC-USD'},

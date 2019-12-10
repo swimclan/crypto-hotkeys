@@ -1,6 +1,6 @@
 {
   "name": "crypto-hotkeys",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Hot keys application for executing efficient orders on the Coinbase Pro cryptocurrency trading exchange",
   "main": "server.js",
   "scripts": {

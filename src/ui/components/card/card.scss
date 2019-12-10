@@ -1,7 +1,12 @@
+@import '../../globals/global.scss';
+
 .card-container {
   display: flex;
+  font-family: $body-font;
+  flex-direction: column;
+  justify-content: flex-start;
   width: 100%;
-  padding: 2em 0.5em 0.5em 0.5em;
+  padding: 1.8em 1em 1em 1em;
   -webkit-box-shadow: 1px 1px 5px 0px rgba(189,189,189,1);
   -moz-box-shadow: 1px 1px 5px 0px rgba(189,189,189,1);
   box-shadow: 1px 1px 5px 0px rgba(189,189,189,1);

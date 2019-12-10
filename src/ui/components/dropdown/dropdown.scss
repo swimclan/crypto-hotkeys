@@ -1,5 +1,14 @@
+@import '../../globals/global.scss';
+
 .dropdown-container {
   outline: none;
+  font-family: $body-font;
+}
+
+.dropdown-label {
+  color: #999;
+  font-size: 0.8em;
+  margin-bottom: 0.8em;
 }
 .dropdown-text-input-container {
   display: flex;
@@ -20,7 +29,7 @@
     content: "\25bc";
     position: absolute;
     right: 2em;
-    top: 2.3em;
+    top: 5em;
     font-size: 0.6em;
   }
 }

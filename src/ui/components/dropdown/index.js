@@ -46,7 +46,7 @@ class Dropdown extends Component {
   }
   
   render() {
-    const { items, placeholder } = this.props;
+    const { items, placeholder, label } = this.props;
     const { value } = this.state;
 
     const dropdownPanelClassNames = classnames({
@@ -56,6 +56,7 @@ class Dropdown extends Component {
 
     return (
       <div tabIndex="1" ref={this.dropdownRef} onBlur={this.onItemListBlur} className="dropdown-container">
+        <section className="dropdown-label">{label}</section>
         <section className="dropdown-text-input-container">
         <div
           id="dropdown-text-input"
@@ -86,6 +87,7 @@ class Dropdown extends Component {
 }
 
 Dropdown.propTypes = {
+  label: PropTypes.string,
   items: PropTypes.arrayOf(PropTypes.object),
   onChange: PropTypes.func,
   placeholder: PropTypes.string

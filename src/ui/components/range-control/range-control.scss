@@ -1,3 +1,5 @@
+@import '../../globals/global.scss';
+
 .range-control-container {
   width: 100%;
   display: flex;
@@ -5,6 +7,8 @@
   justify-content: space-between;
   border: 1px solid #999;
   border-radius: 2px;
+  margin: 1em 0;
+  font-family: $body-font;
 }
 
 .range-control-increment-button {
@@ -43,9 +47,11 @@
   height: 100%;
   border-right: 3px solid #f00;
   padding: 0;
+  background-color: #fcc;
   .range-control-percent-value {
     position: relative;
     top: 30px;
+    color: #999;
     font-size: 0.8em;
     right: -15px;
     z-index: 0;
