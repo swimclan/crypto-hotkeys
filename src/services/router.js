@@ -36,7 +36,7 @@ module.exports.user = function(router, db, passport) {
 }
 
 module.exports.page = function(router) {
-  router.get('/*', (req, res) => {
+  router.get(/^\/(login)?$/, (req, res) => {
     res.status(200).render('index');
   });
 
