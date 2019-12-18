@@ -1,0 +1,20 @@
+@import '../../globals/global.scss';
+
+.button-container {
+  width: 5em;
+  height: 5em;
+  color: #fff;
+  font-family: $body-font;
+  font-size: 1.5em;
+  padding: 0;
+  font-weight: 700;
+  border: none;
+  outline: none;
+  &.disabled {
+    filter: grayscale(90%);
+    opacity: 0.3;
+  }
+  &:active {
+    filter: hue-rotate(30deg);
+  }
+}

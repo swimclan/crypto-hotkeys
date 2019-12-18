@@ -1,0 +1,32 @@
+.login-comtainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.login-input {
+  border: none;
+  width: 100%;
+  height: 1.5em;
+  font-size: 1em;
+  padding: 0.3em;
+  border-radius: 2px;
+  border: 1px solid #999;
+  margin: 1em 0;
+  &::placeholder {
+    color: #bbb;
+  }
+}
+
+.login-submit {
+  width: 10em;
+  height: 2em;
+  padding: 0;
+  font-size: 1em;
+  margin: 0 0 0 auto;
+  border: none;
+  background-color: #aaa;
+  color: #fff;
+
+}
