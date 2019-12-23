@@ -71,7 +71,7 @@ module.exports = {
         .status(400)
         .json({ error: 'feeComputerController() - Invalid percent param' })
     }
-    if (percent > 100 || percent < 10) {
+    if (percent > 100 || percent < 0) {
       logger.log('error', 'feeComputerController() - Percent value must be between 10 and 100');
       return res.status(400).json({ error: 'feeComputerController() - Percent value must be between 10 and 100' });
     }

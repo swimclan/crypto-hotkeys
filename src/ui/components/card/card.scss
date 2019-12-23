@@ -1,15 +1,14 @@
 @import '../../globals/global.scss';
 
 .card-container {
+  position: relative;
   display: flex;
+  background-color: #fff;
   font-family: $body-font;
   flex-direction: column;
   justify-content: flex-start;
   width: 100%;
   padding: 1.8em 1em 1em 1em;
-  -webkit-box-shadow: 1px 1px 5px 0px rgba(189,189,189,1);
-  -moz-box-shadow: 1px 1px 5px 0px rgba(189,189,189,1);
-  box-shadow: 1px 1px 5px 0px rgba(189,189,189,1);
   &::before {
     content: attr(data-label);
     font-size: 0.8em;

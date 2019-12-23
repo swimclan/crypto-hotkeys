@@ -1,6 +1,6 @@
 {
   "name": "crypto-hotkeys",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Hot keys application for executing efficient orders on the Coinbase Pro cryptocurrency trading exchange",
   "main": "server.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "build:prod": "webpack",
     "build": "webpack",
     "storybook": "cd ./src/ui && npm run storybook",
-    "start": "cd ./src/ui && npm run build && cp -r ./dist/bundle.js ../../assets/js/bundle.js && cd ../.. && node server.js",
+    "start": "cd ./src/ui && npm run build && cp -r ./dist/bundle.js ../../assets/js/bundle.js && cp -r ./globals/fonts ../../assets/fonts && cd ../.. && node server.js",
     "watch": "nodemon --exec npm start --ignore 'assets' --ignore 'src/ui/dist'"
   },
   "repository": {

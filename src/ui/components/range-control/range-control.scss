@@ -15,13 +15,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2em;
+  width: 1.5em;
   outline: none;
   border: none;
   color: #444;
   background-color: #eee;
-  font-size: 1.5em;
-  height: inherit;
+  font-size: 3em;
+  height: auto;
   padding: 0.1em;
   &:active {
     background-color: #ddd;
@@ -35,7 +35,6 @@
     width: 100%;
     height: 100%;
     padding: 0;
-    width: calc(100% - 3px);
   }
 }
 
@@ -50,7 +49,7 @@
   background-color: #fcc;
   .range-control-percent-value {
     position: relative;
-    top: 30px;
+    top: 3.5em;
     color: #999;
     font-size: 0.8em;
     right: -15px;

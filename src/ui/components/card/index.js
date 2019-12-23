@@ -10,7 +10,7 @@ function Card(props) {
   );
 }
 
-Card.PropTypes = {
+Card.propTypes = {
   label: PropTypes.string,
   children: PropTypes.object
 }

@@ -4,20 +4,27 @@ import {
   Route,
   Switch
 } from 'react-router-dom';
+import HomePage from '../../pages/home-page';
+import LoginPage from '../../pages/login-page';
 import './app.scss';
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {}
+    this.state = {
+      products: [],
+      selectedProductId: null
+    }
+    
   }
 
   render(props) {
+
     return (
       <Router>
         <Switch>
-          <Route exact path="/login" render={() => <div>Hello from login</div>} />
-          <Route exact path="/" render={() => <div>Hello from slash route</div>} />
+          <Route exact path="/login" component={() => <LoginPage />} />
+          <Route exact path="/" component={() => <HomePage />} />
         </Switch>
       </Router>
     )
